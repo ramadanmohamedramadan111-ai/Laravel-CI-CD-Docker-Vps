@@ -1,0 +1,72 @@
+name: Laravel CI
+
+on:
+  push:
+    branches:
+      - main
+      - develop
+
+  pull_request:
+    branches:
+      - main
+      - develop
+
+jobs:
+
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Build Docker Images
+        run: docker compose build
+
+      - name: Validate Docker Compose
+        run: docker compose config
+
+  test:
+    needs: build
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Build Docker Images
+        run: docker compose build
+
+      - name: Start Containers
+        run: docker compose up -d
+
+      - name: Wait For MySQL
+        run: sleep 30
+
+      - name: Install Composer Dependencies
+        run: docker compose exec -T app composer install --no-interaction --prefer-dist
+
+      - name: Create Environment File
+        run: docker compose exec -T app sh -c "cp .env.example .env"
+
+      - name: Configure Database
+        run: |
+          docker compose exec -T app sh -c "
+          sed -i 's/DB_HOST=.*/DB_HOST=mysql/' .env &&
+          sed -i 's/DB_DATABASE=.*/DB_DATABASE=laravel/' .env &&
+          sed -i 's/DB_USERNAME=.*/DB_USERNAME=laravel/' .env &&
+          sed -i 's/DB_PASSWORD=.*/DB_PASSWORD=laravel/' .env
+          "
+
+      - name: Generate Application Key
+        run: docker compose exec -T app php artisan key:generate
+
+      - name: Run Database Migrations
+        run: docker compose exec -T app php artisan migrate --force
+
+      - name: Run Laravel Tests
+        run: docker compose exec -T app php artisan test
+
+      - name: Stop Containers
+        if: always()
+        run: docker compose down -v
