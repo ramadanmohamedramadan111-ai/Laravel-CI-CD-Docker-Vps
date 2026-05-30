@@ -1,0 +1,32 @@
+name: Laravel CD
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Deploy to GCP VM
+        uses: appleboy/ssh-action@v1.0.3
+
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          key: ${{ secrets.SSH_KEY }}
+
+          script: |
+            cd ~/Laravel-CI-CD-Docker-Vps
+
+            git pull origin master
+
+            docker compose up -d --build
+
+            docker compose exec -T app composer install --no-interaction
+
+            docker compose exec -T app php artisan migrate --force
+
+            docker compose exec -T app php artisan optimize:clear
