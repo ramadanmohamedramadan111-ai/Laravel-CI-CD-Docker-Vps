@@ -17,7 +17,6 @@ jobs:
           host: ${{ secrets.HOST }}
           username: ${{ secrets.USERNAME }}
           key: ${{ secrets.SSH_KEY }}
-
           script: |
             cd ~/Laravel-CI-CD-Docker-Vps
 
@@ -25,8 +24,8 @@ jobs:
 
             docker-compose up -d --build
 
-            docker-compose exec app composer install --no-interaction
+            docker-compose exec -T app composer install --no-interaction
 
-            docker-compose exec app php artisan migrate --force
+            docker-compose exec -T app php artisan migrate --force
 
-            docker-compose exec app php artisan optimize:clear
+            docker-compose exec -T app php artisan optimize:clear
