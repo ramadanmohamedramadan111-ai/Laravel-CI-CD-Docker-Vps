@@ -124,7 +124,7 @@ main{padding:2rem;max-width:860px;}
   <div class="logo">Products <span>/ API Docs</span></div>
   <div class="base-url-bar">
     <span class="base-url-label">Base URL:</span>
-    <span class="base-url-value" id="baseDisplay">http://35.240.64.13</span>
+    <span class="base-url-value" id="baseDisplay">https://35.195.4.120:8443</span>
   </div>
   <div class="env-switcher">
     <button class="env-btn" onclick="setEnv('local',this)">Local</button>
@@ -166,7 +166,7 @@ main{padding:2rem;max-width:860px;}
       <div id="c1-ov" class="tab-pane active">
         <p class="desc">Returns a paginated list of all products (15 per page).</p>
         <div class="code-label">Example</div>
-        <div class="code-block">curl -X GET "<em id="c1-url-ex">http://35.240.64.13</em>/api/products" \
+        <div class="code-block">curl -X GET "<em id="c1-url-ex">https://35.195.4.120:8443</em>/api/products" \
   -H "Accept: application/json"</div>
       </div>
 
@@ -221,7 +221,7 @@ main{padding:2rem;max-width:860px;}
       <div id="c2-ov" class="tab-pane active">
         <p class="desc">Returns a single product by its ID.</p>
         <div class="code-label">Example</div>
-        <div class="code-block">curl -X GET "<em id="c2-url-ex">http://35.240.64.13</em>/api/products/1" \
+        <div class="code-block">curl -X GET "<em id="c2-url-ex">https://35.195.4.120:8443</em>/api/products/1" \
   -H "Accept: application/json"</div>
         <table class="params-table">
           <thead><tr><th>Param</th><th>Type</th><th>Required</th><th>Description</th></tr></thead>
@@ -283,7 +283,7 @@ main{padding:2rem;max-width:860px;}
       <div id="c3-ov" class="tab-pane active">
         <p class="desc">Creates a new product. Send JSON body with the required fields.</p>
         <div class="code-label">Example</div>
-        <div class="code-block">curl -X POST "<em id="c3-url-ex">http://35.240.64.13</em>/api/products" \
+        <div class="code-block">curl -X POST "<em id="c3-url-ex">https://35.195.4.120:8443</em>/api/products" \
   -H "Content-Type: application/json" \
   -H "Accept: application/json" \
   -d '{
@@ -375,7 +375,7 @@ main{padding:2rem;max-width:860px;}
       <div id="c4-ov" class="tab-pane active">
         <p class="desc">Updates an existing product. All fields are optional — only send what you want to change.</p>
         <div class="code-label">Example</div>
-        <div class="code-block">curl -X PUT "<em id="c4-url-ex">http://35.240.64.13</em>/api/products/1" \
+        <div class="code-block">curl -X PUT "<em id="c4-url-ex">https://35.195.4.120:8443</em>/api/products/1" \
   -H "Content-Type: application/json" \
   -H "Accept: application/json" \
   -d '{"price": 999.99, "stock": 30}'</div>
@@ -460,7 +460,7 @@ main{padding:2rem;max-width:860px;}
       <div id="c5-ov" class="tab-pane active">
         <p class="desc">Permanently deletes a product by ID. Returns 204 No Content on success.</p>
         <div class="code-label">Example</div>
-        <div class="code-block">curl -X DELETE "<em id="c5-url-ex">http://35.240.64.13</em>/api/products/1" \
+        <div class="code-block">curl -X DELETE "<em id="c5-url-ex">https://35.195.4.120:8443</em>/api/products/1" \
   -H "Accept: application/json"</div>
       </div>
 
@@ -493,7 +493,7 @@ main{padding:2rem;max-width:860px;}
 </div>
 
 <script>
-const ENVS = { local:'http://localhost:8000', production:'http://35.240.64.13' };
+const ENVS = { local:'http://localhost:8000', production:'https://35.195.4.120:8443' };
 let env = 'production';
 
 function setEnv(e, btn){
