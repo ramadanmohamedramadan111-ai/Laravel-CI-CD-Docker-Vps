@@ -1,0 +1,593 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Products API Docs</title>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#0a0e1a;--surface:#111827;--surface2:#1a2235;--border:#1e2d45;
+  --accent:#00d4ff;--green:#10b981;--red:#ef4444;--yellow:#f59e0b;--purple:#a78bfa;
+  --text:#e2e8f0;--text2:#94a3b8;--text3:#64748b;
+  --mono:'JetBrains Mono',monospace;--display:'Syne',sans-serif;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{background:var(--bg);color:var(--text);font-family:var(--display);min-height:100vh;}
+
+/* HEADER */
+header{
+  background:var(--surface);border-bottom:1px solid var(--border);
+  padding:0 2rem;display:flex;align-items:center;justify-content:space-between;
+  height:58px;position:sticky;top:0;z-index:100;gap:1rem;
+}
+.logo{font-size:1.05rem;font-weight:800;color:var(--accent);white-space:nowrap;}
+.logo span{color:var(--text2);font-weight:400;}
+
+.base-url-bar{display:flex;align-items:center;gap:.5rem;font-family:var(--mono);font-size:.73rem;}
+.base-url-label{color:var(--text3);}
+.base-url-value{color:var(--accent);background:var(--surface2);border:1px solid var(--border);border-radius:5px;padding:3px 10px;}
+
+.env-switcher{display:flex;align-items:center;gap:4px;background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:4px;}
+.env-btn{padding:5px 14px;border-radius:5px;border:none;font-family:var(--mono);font-size:.72rem;font-weight:700;cursor:pointer;transition:all .2s;color:var(--text2);background:transparent;}
+.env-btn.active{background:var(--accent);color:#000;}
+.env-btn:not(.active):hover{background:var(--border);color:var(--text);}
+
+/* LAYOUT */
+.layout{display:grid;grid-template-columns:220px 1fr;min-height:calc(100vh - 58px);}
+aside{background:var(--surface);border-right:1px solid var(--border);padding:1.5rem 0;position:sticky;top:58px;height:calc(100vh - 58px);overflow-y:auto;}
+.sidebar-label{font-size:.62rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--text3);padding:0 1.2rem;margin-bottom:.4rem;}
+.sidebar-link{display:flex;align-items:center;gap:.6rem;padding:7px 12px;cursor:pointer;font-size:.82rem;color:var(--text2);transition:all .15s;text-decoration:none;border-left:2px solid transparent;margin:1px 0;}
+.sidebar-link:hover{background:var(--surface2);color:var(--text);}
+.sidebar-link.active{background:rgba(0,212,255,.08);color:var(--accent);border-left-color:var(--accent);}
+
+.mb{font-family:var(--mono);font-size:.58rem;font-weight:700;padding:2px 5px;border-radius:3px;min-width:38px;text-align:center;}
+.GET{background:rgba(16,185,129,.15);color:var(--green);}
+.POST{background:rgba(167,139,250,.15);color:var(--purple);}
+.PUT{background:rgba(245,158,11,.15);color:var(--yellow);}
+.DELETE{background:rgba(239,68,68,.15);color:var(--red);}
+
+/* MAIN */
+main{padding:2rem;max-width:860px;}
+.page-title{font-size:1.9rem;font-weight:800;letter-spacing:-.03em;margin-bottom:.3rem;}
+.page-sub{color:var(--text2);font-size:.9rem;margin-bottom:2rem;}
+
+/* CARD */
+.card{background:var(--surface);border:1px solid var(--border);border-radius:12px;margin-bottom:1.2rem;overflow:hidden;transition:border-color .2s;}
+.card:hover{border-color:rgba(0,212,255,.3);}
+.card-header{display:flex;align-items:center;gap:.8rem;padding:.9rem 1.2rem;cursor:pointer;user-select:none;}
+.card-title{font-weight:700;font-size:.95rem;}
+.card-path{font-family:var(--mono);font-size:.75rem;color:var(--text2);margin-left:auto;}
+.chevron{color:var(--text3);font-size:.75rem;transition:transform .2s;margin-left:.4rem;}
+.card.open .chevron{transform:rotate(90deg);}
+.card-body{display:none;border-top:1px solid var(--border);}
+.card.open .card-body{display:block;}
+
+/* TABS */
+.tabs{display:flex;border-bottom:1px solid var(--border);padding:0 1.2rem;gap:.2rem;}
+.tab{padding:9px 14px;font-size:.78rem;font-weight:600;color:var(--text3);cursor:pointer;border-bottom:2px solid transparent;transition:all .15s;margin-bottom:-1px;}
+.tab:hover{color:var(--text2);}
+.tab.active{color:var(--accent);border-bottom-color:var(--accent);}
+.tab-pane{display:none;padding:1.2rem;}
+.tab-pane.active{display:block;}
+
+/* CONTENT */
+.desc{color:var(--text2);font-size:.88rem;margin-bottom:1rem;line-height:1.7;}
+
+.params-table{width:100%;border-collapse:collapse;font-size:.8rem;}
+.params-table th{text-align:left;padding:7px 10px;color:var(--text3);font-size:.65rem;text-transform:uppercase;letter-spacing:.06em;border-bottom:1px solid var(--border);}
+.params-table td{padding:9px 10px;border-bottom:1px solid var(--border);color:var(--text2);vertical-align:top;}
+.params-table td:first-child{font-family:var(--mono);color:var(--accent);}
+.req{font-size:.62rem;background:rgba(239,68,68,.15);color:var(--red);padding:1px 5px;border-radius:3px;margin-left:3px;}
+.opt{font-size:.62rem;background:rgba(100,116,139,.15);color:var(--text3);padding:1px 5px;border-radius:3px;margin-left:3px;}
+.type{font-family:var(--mono);font-size:.68rem;background:var(--surface2);color:var(--yellow);padding:1px 6px;border-radius:3px;}
+
+.code-label{font-size:.65rem;color:var(--text3);text-transform:uppercase;letter-spacing:.08em;margin-bottom:.4rem;font-weight:600;}
+.code-block{background:#060d1a;border:1px solid var(--border);border-radius:7px;padding:.9rem;font-family:var(--mono);font-size:.75rem;color:#a8d8ff;overflow-x:auto;line-height:1.75;white-space:pre;margin-bottom:.8rem;}
+
+/* FORM */
+.try-wrap{display:flex;flex-direction:column;gap:.9rem;}
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:.75rem;}
+.form-grid.single{grid-template-columns:1fr;}
+.fg{display:flex;flex-direction:column;gap:.35rem;}
+.fl{font-size:.68rem;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:.06em;font-family:var(--mono);}
+.fi{background:var(--surface2);border:1px solid var(--border);border-radius:6px;padding:8px 11px;color:var(--text);font-family:var(--mono);font-size:.8rem;outline:none;transition:border-color .2s;width:100%;}
+.fi:focus{border-color:var(--accent);}
+.fi.err-field{border-color:var(--red);}
+
+.run-btn{display:flex;align-items:center;gap:.5rem;padding:9px 18px;background:var(--accent);color:#000;border:none;border-radius:7px;font-family:var(--display);font-size:.82rem;font-weight:700;cursor:pointer;transition:all .2s;align-self:flex-start;}
+.run-btn:hover{background:#00b8d9;transform:translateY(-1px);}
+.run-btn:active{transform:translateY(0);}
+.run-btn:disabled{opacity:.6;pointer-events:none;}
+
+.res-box{display:none;flex-direction:column;gap:.6rem;}
+.res-box.show{display:flex;}
+.status-line{display:flex;align-items:center;gap:.6rem;font-family:var(--mono);font-size:.78rem;}
+.sc{padding:3px 10px;border-radius:5px;font-weight:700;}
+.sc.ok{background:rgba(16,185,129,.15);color:var(--green);}
+.sc.err{background:rgba(239,68,68,.15);color:var(--red);}
+.st{color:var(--text3);}
+.res-json{background:#060d1a;border:1px solid var(--border);border-radius:7px;padding:.9rem;font-family:var(--mono);font-size:.75rem;overflow-x:auto;white-space:pre;max-height:280px;overflow-y:auto;line-height:1.75;}
+
+/* JSON colors */
+.jk{color:#7dd3fc;}.js{color:#86efac;}.jn{color:#fbbf24;}.jb{color:#f472b6;}.jnu{color:#94a3b8;}
+
+::-webkit-scrollbar{width:4px;height:4px;}
+::-webkit-scrollbar-thumb{background:var(--border);border-radius:3px;}
+
+@media(max-width:700px){.layout{grid-template-columns:1fr;}aside{display:none;}.base-url-bar{display:none;}.form-grid{grid-template-columns:1fr;}}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo">Products <span>/ API Docs</span></div>
+  <div class="base-url-bar">
+    <span class="base-url-label">Base URL:</span>
+    <span class="base-url-value" id="baseDisplay">http://35.240.64.13</span>
+  </div>
+  <div class="env-switcher">
+    <button class="env-btn" onclick="setEnv('local',this)">Local</button>
+    <button class="env-btn active" onclick="setEnv('production',this)">Production</button>
+  </div>
+</header>
+
+<div class="layout">
+<aside>
+  <div style="padding:0 .8rem 1rem">
+    <div class="sidebar-label">Products</div>
+    <a class="sidebar-link active" onclick="jumpTo('c1',this)"><span class="mb GET">GET</span>List Products</a>
+    <a class="sidebar-link" onclick="jumpTo('c2',this)"><span class="mb GET">GET</span>Show Product</a>
+    <a class="sidebar-link" onclick="jumpTo('c3',this)"><span class="mb POST">POST</span>Create Product</a>
+    <a class="sidebar-link" onclick="jumpTo('c4',this)"><span class="mb PUT">PUT</span>Update Product</a>
+    <a class="sidebar-link" onclick="jumpTo('c5',this)"><span class="mb DELETE">DEL</span>Delete Product</a>
+  </div>
+</aside>
+
+<main>
+  <div class="page-title">Products API</div>
+  <div class="page-sub">Full CRUD — switch environment in the top-right corner.</div>
+
+  <!-- ───── GET /api/products ───── -->
+  <div class="card open" id="c1">
+    <div class="card-header" onclick="toggle(this)">
+      <span class="mb GET">GET</span>
+      <span class="card-title">List Products</span>
+      <span class="card-path">/api/products</span>
+      <span class="chevron">▶</span>
+    </div>
+    <div class="card-body">
+      <div class="tabs">
+        <div class="tab active" onclick="tab(this,'c1-ov')">Overview</div>
+        <div class="tab" onclick="tab(this,'c1-res')">Response</div>
+        <div class="tab" onclick="tab(this,'c1-try')">▶ Try It</div>
+      </div>
+
+      <div id="c1-ov" class="tab-pane active">
+        <p class="desc">Returns a paginated list of all products (15 per page).</p>
+        <div class="code-label">Example</div>
+        <div class="code-block">curl -X GET "<em id="c1-url-ex">http://35.240.64.13</em>/api/products" \
+  -H "Accept: application/json"</div>
+      </div>
+
+      <div id="c1-res" class="tab-pane">
+        <div class="code-label">200 OK</div>
+        <div class="code-block">{
+  "current_page": 1,
+  "data": [
+    {
+      "id": 1,
+      "name": "Laptop Pro",
+      "description": "High-performance laptop",
+      "price": "1299.99",
+      "stock": 50,
+      "created_at": "2026-01-01T00:00:00.000000Z",
+      "updated_at": "2026-01-01T00:00:00.000000Z"
+    }
+  ],
+  "per_page": 15,
+  "total": 1
+}</div>
+      </div>
+
+      <div id="c1-try" class="tab-pane">
+        <div class="try-wrap">
+          <p class="desc">No parameters required — just hit Run.</p>
+          <button class="run-btn" onclick="doGET('/api/products',{},'r1')">▶ Run Request</button>
+          <div class="res-box" id="r1">
+            <div class="status-line"><span class="sc" id="r1-sc"></span><span class="st" id="r1-st"></span></div>
+            <div class="res-json" id="r1-body"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ───── GET /api/products/{id} ───── -->
+  <div class="card" id="c2">
+    <div class="card-header" onclick="toggle(this)">
+      <span class="mb GET">GET</span>
+      <span class="card-title">Show Product</span>
+      <span class="card-path">/api/products/{id}</span>
+      <span class="chevron">▶</span>
+    </div>
+    <div class="card-body">
+      <div class="tabs">
+        <div class="tab active" onclick="tab(this,'c2-ov')">Overview</div>
+        <div class="tab" onclick="tab(this,'c2-res')">Response</div>
+        <div class="tab" onclick="tab(this,'c2-try')">▶ Try It</div>
+      </div>
+
+      <div id="c2-ov" class="tab-pane active">
+        <p class="desc">Returns a single product by its ID.</p>
+        <div class="code-label">Example</div>
+        <div class="code-block">curl -X GET "<em id="c2-url-ex">http://35.240.64.13</em>/api/products/1" \
+  -H "Accept: application/json"</div>
+        <table class="params-table">
+          <thead><tr><th>Param</th><th>Type</th><th>Required</th><th>Description</th></tr></thead>
+          <tbody>
+            <tr><td>id</td><td><span class="type">integer</span></td><td><span class="req">required</span></td><td>Product ID</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div id="c2-res" class="tab-pane">
+        <div class="code-label">200 OK</div>
+        <div class="code-block">{
+  "id": 1,
+  "name": "Laptop Pro",
+  "description": "High-performance laptop",
+  "price": "1299.99",
+  "stock": 50,
+  "created_at": "2026-01-01T00:00:00.000000Z",
+  "updated_at": "2026-01-01T00:00:00.000000Z"
+}</div>
+        <div class="code-label">404 Not Found</div>
+        <div class="code-block">{ "message": "Product not found." }</div>
+      </div>
+
+      <div id="c2-try" class="tab-pane">
+        <div class="try-wrap">
+          <div class="form-grid single">
+            <div class="fg">
+              <label class="fl">id <span class="req">required</span></label>
+              <input class="fi" id="c2-id" type="number" placeholder="1" value="1">
+            </div>
+          </div>
+          <button class="run-btn" onclick="doGET('/api/products/{id}',{id:v('c2-id')},'r2')">▶ Run Request</button>
+          <div class="res-box" id="r2">
+            <div class="status-line"><span class="sc" id="r2-sc"></span><span class="st" id="r2-st"></span></div>
+            <div class="res-json" id="r2-body"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ───── POST /api/products ───── -->
+  <div class="card" id="c3">
+    <div class="card-header" onclick="toggle(this)">
+      <span class="mb POST">POST</span>
+      <span class="card-title">Create Product</span>
+      <span class="card-path">/api/products</span>
+      <span class="chevron">▶</span>
+    </div>
+    <div class="card-body">
+      <div class="tabs">
+        <div class="tab active" onclick="tab(this,'c3-ov')">Overview</div>
+        <div class="tab" onclick="tab(this,'c3-body')">Body Fields</div>
+        <div class="tab" onclick="tab(this,'c3-res')">Response</div>
+        <div class="tab" onclick="tab(this,'c3-try')">▶ Try It</div>
+      </div>
+
+      <div id="c3-ov" class="tab-pane active">
+        <p class="desc">Creates a new product. Send JSON body with the required fields.</p>
+        <div class="code-label">Example</div>
+        <div class="code-block">curl -X POST "<em id="c3-url-ex">http://35.240.64.13</em>/api/products" \
+  -H "Content-Type: application/json" \
+  -H "Accept: application/json" \
+  -d '{
+    "name": "Laptop Pro",
+    "description": "High-performance laptop",
+    "price": 1299.99,
+    "stock": 50
+  }'</div>
+      </div>
+
+      <div id="c3-body" class="tab-pane">
+        <table class="params-table">
+          <thead><tr><th>Field</th><th>Type</th><th>Required</th><th>Rules</th></tr></thead>
+          <tbody>
+            <tr><td>name</td><td><span class="type">string</span></td><td><span class="req">required</span></td><td>max 255 characters</td></tr>
+            <tr><td>description</td><td><span class="type">string</span></td><td><span class="opt">optional</span></td><td>nullable</td></tr>
+            <tr><td>price</td><td><span class="type">numeric</span></td><td><span class="req">required</span></td><td>min: 0</td></tr>
+            <tr><td>stock</td><td><span class="type">integer</span></td><td><span class="req">required</span></td><td>min: 0</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div id="c3-res" class="tab-pane">
+        <div class="code-label">201 Created</div>
+        <div class="code-block">{
+  "id": 2,
+  "name": "Laptop Pro",
+  "description": "High-performance laptop",
+  "price": "1299.99",
+  "stock": 50,
+  "created_at": "2026-05-16T00:00:00.000000Z",
+  "updated_at": "2026-05-16T00:00:00.000000Z"
+}</div>
+        <div class="code-label">422 Validation Error</div>
+        <div class="code-block">{
+  "message": "The stock field is required.",
+  "errors": {
+    "stock": ["The stock field is required."]
+  }
+}</div>
+      </div>
+
+      <div id="c3-try" class="tab-pane">
+        <div class="try-wrap">
+          <div class="form-grid">
+            <div class="fg">
+              <label class="fl">name <span class="req">required</span></label>
+              <input class="fi" id="c3-name" type="text" placeholder="Laptop Pro">
+            </div>
+            <div class="fg">
+              <label class="fl">price <span class="req">required</span></label>
+              <input class="fi" id="c3-price" type="number" step="0.01" placeholder="99.99">
+            </div>
+            <div class="fg">
+              <label class="fl">stock <span class="req">required</span></label>
+              <input class="fi" id="c3-stock" type="number" placeholder="10">
+            </div>
+            <div class="fg">
+              <label class="fl">description <span class="opt">optional</span></label>
+              <input class="fi" id="c3-desc" type="text" placeholder="Product description">
+            </div>
+          </div>
+          <button class="run-btn" onclick="doJSON('POST','/api/products',{name:v('c3-name'),price:v('c3-price'),stock:v('c3-stock'),description:v('c3-desc')},'r3')">▶ Run Request</button>
+          <div class="res-box" id="r3">
+            <div class="status-line"><span class="sc" id="r3-sc"></span><span class="st" id="r3-st"></span></div>
+            <div class="res-json" id="r3-body"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ───── PUT /api/products/{id} ───── -->
+  <div class="card" id="c4">
+    <div class="card-header" onclick="toggle(this)">
+      <span class="mb PUT">PUT</span>
+      <span class="card-title">Update Product</span>
+      <span class="card-path">/api/products/{id}</span>
+      <span class="chevron">▶</span>
+    </div>
+    <div class="card-body">
+      <div class="tabs">
+        <div class="tab active" onclick="tab(this,'c4-ov')">Overview</div>
+        <div class="tab" onclick="tab(this,'c4-body')">Body Fields</div>
+        <div class="tab" onclick="tab(this,'c4-res')">Response</div>
+        <div class="tab" onclick="tab(this,'c4-try')">▶ Try It</div>
+      </div>
+
+      <div id="c4-ov" class="tab-pane active">
+        <p class="desc">Updates an existing product. All fields are optional — only send what you want to change.</p>
+        <div class="code-label">Example</div>
+        <div class="code-block">curl -X PUT "<em id="c4-url-ex">http://35.240.64.13</em>/api/products/1" \
+  -H "Content-Type: application/json" \
+  -H "Accept: application/json" \
+  -d '{"price": 999.99, "stock": 30}'</div>
+      </div>
+
+      <div id="c4-body" class="tab-pane">
+        <table class="params-table">
+          <thead><tr><th>Field</th><th>Type</th><th>Required</th><th>Rules</th></tr></thead>
+          <tbody>
+            <tr><td>id</td><td><span class="type">integer</span></td><td><span class="req">required</span></td><td>URL parameter</td></tr>
+            <tr><td>name</td><td><span class="type">string</span></td><td><span class="opt">optional</span></td><td>max 255 characters</td></tr>
+            <tr><td>description</td><td><span class="type">string</span></td><td><span class="opt">optional</span></td><td>nullable</td></tr>
+            <tr><td>price</td><td><span class="type">numeric</span></td><td><span class="opt">optional</span></td><td>min: 0</td></tr>
+            <tr><td>stock</td><td><span class="type">integer</span></td><td><span class="opt">optional</span></td><td>min: 0</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div id="c4-res" class="tab-pane">
+        <div class="code-label">200 OK</div>
+        <div class="code-block">{
+  "id": 1,
+  "name": "Laptop Pro",
+  "description": "Updated description",
+  "price": "999.99",
+  "stock": 30,
+  "updated_at": "2026-05-16T00:00:00.000000Z"
+}</div>
+        <div class="code-label">404 Not Found</div>
+        <div class="code-block">{ "message": "Product not found." }</div>
+      </div>
+
+      <div id="c4-try" class="tab-pane">
+        <div class="try-wrap">
+          <div class="form-grid">
+            <div class="fg">
+              <label class="fl">id <span class="req">required</span></label>
+              <input class="fi" id="c4-id" type="number" placeholder="1" value="1">
+            </div>
+            <div class="fg">
+              <label class="fl">name <span class="opt">optional</span></label>
+              <input class="fi" id="c4-name" type="text" placeholder="Updated Name">
+            </div>
+            <div class="fg">
+              <label class="fl">price <span class="opt">optional</span></label>
+              <input class="fi" id="c4-price" type="number" step="0.01" placeholder="999.99">
+            </div>
+            <div class="fg">
+              <label class="fl">stock <span class="opt">optional</span></label>
+              <input class="fi" id="c4-stock" type="number" placeholder="30">
+            </div>
+            <div class="fg" style="grid-column:span 2">
+              <label class="fl">description <span class="opt">optional</span></label>
+              <input class="fi" id="c4-desc" type="text" placeholder="Updated description">
+            </div>
+          </div>
+          <button class="run-btn" onclick="doJSON('PUT','/api/products/{id}',{id:v('c4-id'),name:v('c4-name'),price:v('c4-price'),stock:v('c4-stock'),description:v('c4-desc')},'r4')">▶ Run Request</button>
+          <div class="res-box" id="r4">
+            <div class="status-line"><span class="sc" id="r4-sc"></span><span class="st" id="r4-st"></span></div>
+            <div class="res-json" id="r4-body"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ───── DELETE /api/products/{id} ───── -->
+  <div class="card" id="c5">
+    <div class="card-header" onclick="toggle(this)">
+      <span class="mb DELETE">DELETE</span>
+      <span class="card-title">Delete Product</span>
+      <span class="card-path">/api/products/{id}</span>
+      <span class="chevron">▶</span>
+    </div>
+    <div class="card-body">
+      <div class="tabs">
+        <div class="tab active" onclick="tab(this,'c5-ov')">Overview</div>
+        <div class="tab" onclick="tab(this,'c5-res')">Response</div>
+        <div class="tab" onclick="tab(this,'c5-try')">▶ Try It</div>
+      </div>
+
+      <div id="c5-ov" class="tab-pane active">
+        <p class="desc">Permanently deletes a product by ID. Returns 204 No Content on success.</p>
+        <div class="code-label">Example</div>
+        <div class="code-block">curl -X DELETE "<em id="c5-url-ex">http://35.240.64.13</em>/api/products/1" \
+  -H "Accept: application/json"</div>
+      </div>
+
+      <div id="c5-res" class="tab-pane">
+        <div class="code-label">204 No Content</div>
+        <div class="code-block">(empty body)</div>
+        <div class="code-label">404 Not Found</div>
+        <div class="code-block">{ "message": "Product not found." }</div>
+      </div>
+
+      <div id="c5-try" class="tab-pane">
+        <div class="try-wrap">
+          <div class="form-grid single">
+            <div class="fg">
+              <label class="fl">id <span class="req">required</span></label>
+              <input class="fi" id="c5-id" type="number" placeholder="1" value="1">
+            </div>
+          </div>
+          <button class="run-btn" onclick="doJSON('DELETE','/api/products/{id}',{id:v('c5-id')},'r5')">▶ Run Request</button>
+          <div class="res-box" id="r5">
+            <div class="status-line"><span class="sc" id="r5-sc"></span><span class="st" id="r5-st"></span></div>
+            <div class="res-json" id="r5-body"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</main>
+</div>
+
+<script>
+const ENVS = { local:'http://localhost:8000', production:'http://35.240.64.13' };
+let env = 'production';
+
+function setEnv(e, btn){
+  env = e;
+  document.querySelectorAll('.env-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById('baseDisplay').textContent = ENVS[e];
+  document.querySelectorAll('[id$="-url-ex"]').forEach(el=>el.textContent=ENVS[e]);
+}
+
+function toggle(h){ h.closest('.card').classList.toggle('open'); }
+
+function tab(t, paneId){
+  const body = t.closest('.card-body');
+  body.querySelectorAll('.tab').forEach(x=>x.classList.remove('active'));
+  body.querySelectorAll('.tab-pane').forEach(x=>x.classList.remove('active'));
+  t.classList.add('active');
+  document.getElementById(paneId).classList.add('active');
+}
+
+function jumpTo(id, link){
+  document.querySelectorAll('.sidebar-link').forEach(l=>l.classList.remove('active'));
+  link.classList.add('active');
+  const el=document.getElementById(id);
+  el.classList.add('open');
+  el.scrollIntoView({behavior:'smooth',block:'start'});
+}
+
+function v(id){ return document.getElementById(id)?.value?.trim()||''; }
+
+function hlJSON(json){
+  return json.replace(/("(\\u[a-zA-Z0-9]{4}|\\[^u]|[^\\"])*"(\s*:)?|\b(true|false|null)\b|-?\d+(?:\.\d*)?(?:[eE][+\-]?\d+)?)/g, m=>{
+    if(/^"/.test(m)) return /:$/.test(m)?`<span class="jk">${m}</span>`:`<span class="js">${m}</span>`;
+    if(/true|false/.test(m)) return `<span class="jb">${m}</span>`;
+    if(/null/.test(m)) return `<span class="jnu">${m}</span>`;
+    return `<span class="jn">${m}</span>`;
+  });
+}
+
+function showRes(id, status, ms, body){
+  const box=document.getElementById(id);
+  box.classList.add('show');
+  const sc=document.getElementById(id+'-sc');
+  sc.textContent=status;
+  sc.className='sc '+(status>=200&&status<300?'ok':'err');
+  document.getElementById(id+'-st').textContent=ms+'ms';
+  const bel=document.getElementById(id+'-body');
+  try{ bel.innerHTML=hlJSON(JSON.stringify(typeof body==='string'?JSON.parse(body):body,null,2)); }
+  catch{ bel.textContent=body||'(empty)'; }
+}
+
+function buildUrl(path, params){
+  let url = ENVS[env]+path;
+  const qs=[];
+  for(const[k,val] of Object.entries(params)){
+    if(!val) continue;
+    if(url.includes(`{${k}}`)) url=url.replace(`{${k}}`,encodeURIComponent(val));
+    else qs.push(`${k}=${encodeURIComponent(val)}`);
+  }
+  if(qs.length) url+='?'+qs.join('&');
+  return url;
+}
+
+async function doGET(path, params, resId){
+  const btn=event.target; btn.disabled=true; btn.textContent='⏳ Running...';
+  const url=buildUrl(path,params), t=Date.now();
+  try{
+    const r=await fetch(url,{headers:{'Accept':'application/json'}});
+    showRes(resId,r.status,Date.now()-t,await r.text());
+  }catch(e){ showRes(resId,'ERR',Date.now()-t,{error:e.message}); }
+  btn.disabled=false; btn.textContent='▶ Run Request';
+}
+
+async function doJSON(method, path, params, resId){
+  const btn=event.target; btn.disabled=true; btn.textContent='⏳ Running...';
+  // separate path params from body params
+  const pathP={}, bodyP={};
+  for(const[k,val] of Object.entries(params)){
+    if(!val) continue;
+    if(path.includes(`{${k}}`)) pathP[k]=val;
+    else bodyP[k]=val;
+  }
+  let url=ENVS[env]+path;
+  for(const[k,val] of Object.entries(pathP)) url=url.replace(`{${k}}`,encodeURIComponent(val));
+  const t=Date.now();
+  try{
+    const opts={method,headers:{'Accept':'application/json','Content-Type':'application/json'}};
+    if(method!=='DELETE') opts.body=JSON.stringify(bodyP);
+    const r=await fetch(url,opts);
+    const text=await r.text();
+    showRes(resId,r.status,Date.now()-t,text||'(empty)');
+  }catch(e){ showRes(resId,'ERR',Date.now()-t,{error:e.message}); }
+  btn.disabled=false; btn.textContent='▶ Run Request';
+}
+</script>
+</body>
+</html>

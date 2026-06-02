@@ -1,0 +1,430 @@
+  <!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Products API Documentation</title>
+  <style>
+    :root{color-scheme:light;scroll-behavior:smooth}
+    *{box-sizing:border-box}
+    body{font-family:Inter,Segoe UI,Helvetica,Arial,sans-serif;background:#f3f6fb;color:#111827;margin:0;padding:0}
+    .page{max-width:980px;margin:0 auto;padding:32px 24px}
+    .hero{margin-bottom:32px}
+    h1{font-size:2.4rem;margin:0 0 12px;letter-spacing:-0.03em}
+    p.lead{max-width:760px;font-size:1rem;line-height:1.8;color:#4b5563;margin:0 0 24px}
+    .badge{display:inline-flex;padding:4px 10px;border-radius:999px;background:#e0f2fe;color:#0369a1;font-size:0.82rem;font-weight:600;margin-right:8px}
+    .section{margin-bottom:32px}
+    h2{font-size:1.3rem;margin:0 0 16px;color:#111827}
+    .card{background:#ffffff;border:1px solid #e5e7eb;border-radius:18px;padding:24px;margin-bottom:20px;box-shadow:0 12px 30px rgba(15,23,42,0.06)}
+    .card-title{display:flex;align-items:center;gap:12px;font-size:1rem;font-weight:700;margin-bottom:14px}
+    .method{font-family:Inter,system-ui,sans-serif;font-weight:700;padding:6px 10px;border-radius:999px;color:#ffffff;background:#0f766e;text-transform:uppercase;font-size:0.75rem}
+    .path{font-family:Menlo,Monaco,Consolas,monospace;font-size:0.95rem;color:#0f172a;word-break:break-all}
+    .field-list{list-style:none;padding:0;margin:16px 0 0}
+    .field-list li{margin-bottom:10px;line-height:1.7}
+    .label{font-weight:700;color:#111827}
+    .params{background:#f8fafc;border:1px solid #e2e8f0;border-radius:12px;padding:16px;margin-top:12px}
+    .params-row{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+    input,textarea{font-family:Inter,system-ui,sans-serif;width:100%;padding:10px;border:1px solid #d1d5db;border-radius:12px;background:#fff;color:#111827}
+    textarea{min-height:120px;resize:vertical}
+    pre{background:#0f172a;color:#e6eef8;border-radius:14px;padding:18px;overflow-x:auto;position:relative;margin:16px 0}
+    pre code{font-family:Menlo,Monaco,Consolas,monospace;font-size:0.94rem;line-height:1.6}
+    .button{border:none;border-radius:999px;background:#14b8a6;color:#ffffff;padding:10px 16px;font-size:0.92rem;cursor:pointer;transition:transform .15s ease,background .15s ease}
+    .button:hover{transform:translateY(-1px);background:#0f766e}
+    .footer{font-size:0.92rem;color:#6b7280;margin-top:32px}
+    .note{background:#eff6ff;border-left:4px solid #93c5fd;padding:14px 18px;border-radius:12px;margin-top:18px}
+    .env-buttons{display:flex;gap:12px;flex-wrap:wrap;margin-top:12px}
+    .env-button{background:#eef2ff;color:#0369a1;font-weight:700;padding:10px 16px;border-radius:999px;border:1px solid transparent;cursor:pointer}
+    .env-button.active{background:#0369a1;color:#ffffff;border-color:#0369a1}
+    .result-box{background:#111827;border:1px solid #374151;border-radius:14px;padding:16px;color:#e5e7eb;font-size:0.92rem;white-space:pre-wrap;line-height:1.5;min-height:120px}
+  </style>
+</head>
+<body>
+  <main class="page">
+    <section class="hero">
+      <span class="badge">API</span>
+      <h1>Products API Documentation</h1>
+      <p class="lead">A minimal REST API for managing products with full examples and runnable UI.</p>
+      <div class="note" id="page-origin-note" style="display:none;">
+        <p><strong>Note:</strong> Open this page through <code>http://localhost:8000/docs/api.html</code> if you want the Run buttons to call the local API successfully.</p>
+      </div>
+      <div class="params-row">
+        <div class="params" style="flex:1;min-width:220px;">
+          <div class="label">Current environment</div>
+          <pre><code id="current-env">Local</code></pre>
+        </div>
+        <div class="params" style="flex:1;min-width:220px;">
+          <div class="label">Base host</div>
+          <pre><code id="current-host">http://localhost:8000</code></pre>
+        </div>
+      </div>
+      <div class="env-buttons">
+        <button class="env-button active" data-env="local">Local</button>
+        <button class="env-button" data-env="production">Production</button>
+      </div>
+      <p class="lead">Switch between environments to update all examples automatically.</p>
+    </section>
+
+    <section class="section">
+      <h2>List Products</h2>
+      <div class="card">
+        <div class="card-title"><span class="method">GET</span><span class="path" id="list-products-url"></span></div>
+        <p>Fetch a paginated list of products.</p>
+        <div class="params">
+          <div class="label">Full URL</div>
+          <pre><code id="list-products-full"></code></pre>
+          <button class="button" data-target="list-products-full">Copy URL</button>
+        </div>
+        <div class="params">
+          <div class="label">Response example</div>
+          <pre><code id="list-products-response">{
+  "current_page": 1,
+  "data": [
+    {
+      "id": 1,
+      "name": "Pen",
+      "description": "Black ballpoint pen",
+      "price": "4.50",
+      "stock": 120
+    }
+  ],
+  "total": 20
+}</code></pre>
+          <button class="button" data-target="list-products-response">Copy response</button>
+        </div>
+        <div class="params">
+          <div class="label">curl</div>
+          <pre><code id="list-products-curl"></code></pre>
+          <button class="button" data-target="list-products-curl">Copy curl</button>
+        </div>
+        <div class="params">
+          <button class="button" data-action="try" data-endpoint="list">Run endpoint</button>
+          <div class="result-box" id="list-products-result">Press Run endpoint to execute this request.</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2>Get Product</h2>
+      <div class="card">
+        <div class="card-title"><span class="method">GET</span><span class="path" id="get-product-url"></span></div>
+        <p>Fetch a single product by ID.</p>
+        <div class="params">
+          <div class="label">Product ID</div>
+          <input type="number" id="get-product-id" value="3" min="1" />
+        </div>
+        <div class="params">
+          <div class="label">Full URL</div>
+          <pre><code id="get-product-full"></code></pre>
+          <button class="button" data-target="get-product-full">Copy URL</button>
+        </div>
+        <div class="params">
+          <div class="label">Response example</div>
+          <pre><code id="get-product-response">{
+  "id": 1,
+  "name": "Pen",
+  "description": "Black ballpoint pen",
+  "price": "4.50",
+  "stock": 120
+}</code></pre>
+          <button class="button" data-target="get-product-response">Copy response</button>
+        </div>
+        <div class="params">
+          <div class="label">curl</div>
+          <pre><code id="get-product-curl"></code></pre>
+          <button class="button" data-target="get-product-curl">Copy curl</button>
+        </div>
+        <div class="params">
+          <button class="button" data-action="try" data-endpoint="get">Run endpoint</button>
+          <div class="result-box" id="get-product-result">Press Run endpoint to execute this request.</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2>Create Product</h2>
+      <div class="card">
+        <div class="card-title"><span class="method">POST</span><span class="path" id="create-product-url"></span></div>
+        <p>Create a new product record.</p>
+        <div class="params">
+          <div class="label">Full URL</div>
+          <pre><code id="create-product-full"></code></pre>
+          <button class="button" data-target="create-product-full">Copy URL</button>
+        </div>
+        <div class="params">
+          <div class="label">Request body</div>
+          <textarea id="create-product-request">{
+  "name": "Notebook",
+  "description": "A5 paper notebook",
+  "price": 3.50,
+  "stock": 50
+}</textarea>
+          <button class="button" data-target="create-product-request">Copy request</button>
+        </div>
+        <div class="params">
+          <div class="label">Response example</div>
+          <pre><code id="create-product-response">{
+  "id": 21,
+  "name": "Notebook",
+  "description": "A5 paper notebook",
+  "price": "3.50",
+  "stock": 50
+}</code></pre>
+          <button class="button" data-target="create-product-response">Copy response</button>
+        </div>
+        <div class="params">
+          <div class="label">curl</div>
+          <pre><code id="create-product-curl"></code></pre>
+          <button class="button" data-target="create-product-curl">Copy curl</button>
+        </div>
+        <div class="params">
+          <button class="button" data-action="try" data-endpoint="create">Run endpoint</button>
+          <div class="result-box" id="create-product-result">Press Run endpoint to execute this request.</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2>Update Product</h2>
+      <div class="card">
+        <div class="card-title"><span class="method">PUT</span><span class="path" id="update-product-url"></span></div>
+        <p>Replace a product completely by ID.</p>
+        <div class="params">
+          <div class="label">Product ID</div>
+          <input type="number" id="update-product-id" value="3" min="1" />
+        </div>
+        <div class="params">
+          <div class="label">Full URL</div>
+          <pre><code id="update-product-full"></code></pre>
+          <button class="button" data-target="update-product-full">Copy URL</button>
+        </div>
+        <div class="params">
+          <div class="label">Request body</div>
+          <textarea id="update-product-request">{
+  "name": "Notebook Pro",
+  "description": "Premium notebook",
+  "price": 5.75,
+  "stock": 40
+}</textarea>
+          <button class="button" data-target="update-product-request">Copy request</button>
+        </div>
+        <div class="params">
+          <div class="label">Response example</div>
+          <pre><code id="update-product-response">{
+  "id": 1,
+  "name": "Notebook Pro",
+  "description": "Premium notebook",
+  "price": "5.75",
+  "stock": 40
+}</code></pre>
+          <button class="button" data-target="update-product-response">Copy response</button>
+        </div>
+        <div class="params">
+          <div class="label">curl</div>
+          <pre><code id="update-product-curl"></code></pre>
+          <button class="button" data-target="update-product-curl">Copy curl</button>
+        </div>
+        <div class="params">
+          <button class="button" data-action="try" data-endpoint="update">Run endpoint</button>
+          <div class="result-box" id="update-product-result">Press Run endpoint to execute this request.</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2>Delete Product</h2>
+      <div class="card">
+        <div class="card-title"><span class="method">DELETE</span><span class="path" id="delete-product-url"></span></div>
+        <p>Delete a product by ID.</p>
+        <div class="params">
+          <div class="label">Product ID</div>
+          <input type="number" id="delete-product-id" value="3" min="1" />
+        </div>
+        <div class="params">
+          <div class="label">Full URL</div>
+          <pre><code id="delete-product-full"></code></pre>
+          <button class="button" data-target="delete-product-full">Copy URL</button>
+        </div>
+        <div class="params">
+          <div class="label">Response</div>
+          <pre><code id="delete-product-response">{
+  "status": "204 No Content"
+}</code></pre>
+          <button class="button" data-target="delete-product-response">Copy response</button>
+        </div>
+        <div class="params">
+          <div class="label">curl</div>
+          <pre><code id="delete-product-curl"></code></pre>
+          <button class="button" data-target="delete-product-curl">Copy curl</button>
+        </div>
+        <div class="params">
+          <button class="button" data-action="try" data-endpoint="delete">Run endpoint</button>
+          <div class="result-box" id="delete-product-result">Press Run endpoint to execute this request.</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2>Notes</h2>
+      <div class="note">
+        <p>Use the environment buttons above to switch between <strong>local</strong> and <strong>production</strong>. The page updates all example URLs automatically.</p>
+        <p>The interactive Run buttons work only when the API is reachable from this browser and the server allows requests.</p>
+      </div>
+      <p class="footer">Import the Postman collection: <a href="postman_collection.json">postman_collection.json</a></p>
+    </section>
+  </main>
+
+  <script>
+    const originHost = window.location.protocol.startsWith('http')
+      ? window.location.origin.replace(/\/$/, '')
+      : null;
+
+    const pageOriginWarning = document.getElementById('page-origin-note');
+    if (!originHost && pageOriginWarning) {
+      pageOriginWarning.style.display = 'block';
+    }
+
+    const environments = {
+      local: {
+        name: 'Local',
+        url: originHost && (originHost.includes('localhost') || originHost.includes('127.0.0.1'))
+          ? originHost
+          : 'http://localhost:8000'
+      },
+      production: { name: 'Production', url: 'http://35.240.64.13' }
+    };
+
+    let currentEnvironment = 'local';
+
+    const samples = {
+      create: { name: 'Notebook', description: 'A5 paper notebook', price: 3.5, stock: 50 },
+      update: { name: 'Notebook Pro', description: 'Premium notebook', price: 5.75, stock: 40 }
+    };
+
+    const endpoints = {
+      list: () => `${environments[currentEnvironment].url}/api/products`,
+      get: () => `${environments[currentEnvironment].url}/api/products/${document.getElementById('get-product-id').value || 1}`,
+      create: () => `${environments[currentEnvironment].url}/api/products`,
+      update: () => `${environments[currentEnvironment].url}/api/products/${document.getElementById('update-product-id').value || 1}`,
+      delete: () => `${environments[currentEnvironment].url}/api/products/${document.getElementById('delete-product-id').value || 1}`
+    };
+
+    const setText = (id, text) => { document.getElementById(id).textContent = text; };
+
+    const updateURLs = () => {
+      setText('current-env', environments[currentEnvironment].name);
+      setText('current-host', environments[currentEnvironment].url);
+
+      setText('list-products-url', endpoints.list());
+      setText('list-products-full', endpoints.list());
+      setText('list-products-curl', `curl -s "${endpoints.list()}"`);
+
+      setText('get-product-url', endpoints.get());
+      setText('get-product-full', endpoints.get());
+      setText('get-product-curl', `curl -s "${endpoints.get()}"`);
+
+      setText('create-product-url', endpoints.create());
+      setText('create-product-full', endpoints.create());
+      setText('create-product-curl', `curl -X POST "${endpoints.create()}" 
+  -H "Content-Type: application/json" 
+  -d '${JSON.stringify(samples.create)}'`);
+
+      setText('update-product-url', endpoints.update());
+      setText('update-product-full', endpoints.update());
+      setText('update-product-curl', `curl -X PUT "${endpoints.update()}" 
+  -H "Content-Type: application/json" 
+  -d '${JSON.stringify(samples.update)}'`);
+
+      setText('delete-product-url', endpoints.delete());
+      setText('delete-product-full', endpoints.delete());
+      setText('delete-product-curl', `curl -X DELETE "${endpoints.delete()}"`);
+
+      document.querySelectorAll('.env-button').forEach(button => {
+        button.classList.toggle('active', button.dataset.env === currentEnvironment);
+      });
+    };
+
+    const setResult = (id, text) => {
+      const el = document.getElementById(id);
+      if (el) el.textContent = text;
+      console.log(`[docs] ${id}:`, text);
+    };
+
+    const runRequest = async (action) => {
+      const resultId = `${action}-product-result`;
+      const url = endpoints[action]();
+      const options = { method: 'GET', headers: { 'Accept': 'application/json' }, mode: 'cors' };
+
+      if (action === 'create' || action === 'update') {
+        options.method = action === 'create' ? 'POST' : 'PUT';
+        options.headers['Content-Type'] = 'application/json';
+        options.body = action === 'create'
+          ? document.getElementById('create-product-request').value
+          : document.getElementById('update-product-request').value;
+      }
+      if (action === 'delete') options.method = 'DELETE';
+
+      setResult(resultId, `Sending ${options.method} ${url}...`);
+      console.log('[docs] running', action, url, options);
+
+      try {
+        const response = await fetch(url, options);
+        console.log('[docs] fetch completed', response.status, response.statusText);
+        const contentType = response.headers.get('content-type') || '';
+        let body;
+        if (contentType.includes('application/json')) {
+          body = JSON.stringify(await response.json(), null, 2);
+        } else {
+          body = await response.text();
+        }
+${body}` : ''}`);
+        setResult(resultId, `Status: ${response.status} ${response.statusText}\n${body ? `Response:\n${body}` : ''}`);
+      } catch (error) {
+        console.error('[docs] fetch error', error);
+        setResult(resultId, `Request error: ${error.message}`);
+      }
+    };
+
+    try {
+      document.querySelectorAll('.env-button').forEach(button => {
+        button.addEventListener('click', () => {
+          currentEnvironment = button.dataset.env;
+          updateURLs();
+        });
+      });
+    } catch (e) { console.error('[docs] env button attach failed', e); }
+
+    try {
+      document.querySelectorAll('[data-action="try"]').forEach(button => {
+        button.addEventListener('click', () => {
+          const ep = button.dataset.endpoint;
+          console.log('[docs] try click', ep);
+          setResult(`${ep}-product-result`, 'Starting request...');
+          runRequest(ep);
+        });
+      });
+    } catch (e) { console.error('[docs] run button attach failed', e); }
+
+    try {
+      document.querySelectorAll('.button[data-target]').forEach(button => {
+        button.addEventListener('click', () => {
+          const target = document.getElementById(button.dataset.target);
+          if (!target) return;
+          navigator.clipboard.writeText(target.textContent).then(() => {
+            const original = button.textContent;
+            button.textContent = 'Copied';
+            setTimeout(() => button.textContent = original, 1200);
+          }).catch(err => console.warn('[docs] clipboard failed', err));
+        });
+      });
+    } catch (e) { console.error('[docs] copy button attach failed', e); }
+
+    document.getElementById('get-product-id').addEventListener('input', updateURLs);
+    document.getElementById('update-product-id').addEventListener('input', updateURLs);
+    document.getElementById('delete-product-id').addEventListener('input', updateURLs);
+    document.getElementById('create-product-request').addEventListener('input', () => updateURLs());
+    document.getElementById('update-product-request').addEventListener('input', () => updateURLs());
+
+    updateURLs();
+  </script>
+</body>
+</html>

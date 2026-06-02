@@ -1,3 +1,62 @@
+# API توثيق - Products
+
+توثيق مختصر للـ API الخاص بالـ `products` حتى يتمكن أي شخص من تجربة الواجهات عبر Postman أو curl.
+
+Base URL
+- استخدم المتغير `{{base_url}}`، مثال محلي: `http://localhost` أو داخل الـ Docker: `http://localhost:8000` حسب إعدادك.
+
+نقاط النهاية
+- `GET /api/products` — جلب قائمة المنتجات (paginated)
+- `GET /api/products/{id}` — جلب منتج واحد
+- `POST /api/products` — إنشاء منتج جديد
+- `PUT /api/products/{id}` — تحديث كامل لمنتج
+- `PATCH /api/products/{id}` — تحديث جزئي لمنتج
+- `DELETE /api/products/{id}` — حذف منتج
+
+أمثلة جسم الطلب (JSON)
+
+Create (POST /api/products)
+
+{
+  "name": "قلم حبر",
+  "description": "قلم حبر أسود عالي الجودة",
+  "price": 4.50,
+  "stock": 120
+}
+
+Update (PUT /api/products/1)
+
+{
+  "name": "قلم جِل",
+  "description": "قلم جِل أزرق",
+  "price": 5.00,
+  "stock": 80
+}
+
+ردود متوقعة
+- `200 OK` — عند نجاح `GET`, `PUT`, `PATCH`
+- `201 Created` — عند نجاح `POST`
+- `204 No Content` — عند نجاح `DELETE`
+- `422 Unprocessable Entity` — عند فشل التحقق من صحة البيانات
+
+تشغيل محلي سريع
+- إن قمت بتعديل PHP أو تستخدم Docker، تأكد من تشغيل الميغريشن والسيِدرز: في مجلد `app`:
+
+```bash
+php artisan migrate --seed
+```
+
+- إذا كنت داخل Docker، استبدل الأمر بما يناسب خدمة الـ PHP في `docker-compose.yml`، مثال:
+
+```bash
+docker-compose run --rm app php artisan migrate --seed
+```
+
+ملف مجموعة Postman
+- يوجد ملف المجموعة في `docs/postman_collection.json` يمكن استيراده مباشرة في Postman. تأكد من ضبط متغير `base_url` في بيئة Postman قبل التشغيل.
+
+ملاحظات
+- إن لم تتوفر قاعدة بيانات أو كانت نسخة PHP الحالية غير مطابقة لمتطلبات الـ Composer، يمكنك استيراد مجموعة Postman وتجربة الطلبات يدوياً مع تغيير `base_url` إلى بيئة تعمل أو إلى mock server.
 <p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
 
 <p align="center">

@@ -1,0 +1,117 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Products API Documentation</title>
+  <style>
+    body{font-family:Inter,Segoe UI,Helvetica,Arial,sans-serif;background:#f7f9fb;color:#1f2937;margin:0}
+    .container{max-width:900px;margin:40px auto;padding:24px;background:#fff;border-radius:8px;box-shadow:0 6px 18px rgba(15,23,42,0.06)}
+    h1{margin:0 0 8px;font-size:28px}
+    p.lead{color:#374151;margin:0 0 20px}
+    pre{background:#0f172a;color:#e6eef8;padding:12px;border-radius:6px;overflow:auto}
+    code{background:#eef2ff;padding:2px 6px;border-radius:4px}
+    table{width:100%;border-collapse:collapse;margin:12px 0}
+    th,td{padding:10px;border-bottom:1px solid #eef2ff;text-align:left}
+    th{background:#f1f5f9}
+    .btn{display:inline-block;padding:8px 12px;background:#0ea5a3;color:#fff;border-radius:6px;text-decoration:none}
+    .muted{color:#6b7280;font-size:14px}
+    .endpoint{background:#f8fafc;border-left:4px solid #0ea5a3;padding:10px;border-radius:4px;margin:12px 0}
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Products API</h1>
+    <p class="lead">Clean, minimal, and ready-to-use REST API for managing products. Base path: <code>/api/products</code></p>
+
+    <h2>Authentication</h2>
+    <p class="muted">This example project does not enforce authentication by default. If your app requires auth, add the appropriate headers (Bearer token) to requests.</p>
+
+    <h2>Endpoints</h2>
+
+    <div class="endpoint">
+      <strong>GET /api/products</strong>
+      <p class="muted">Returns paginated list of products.</p>
+      <table>
+        <tr><th>Query</th><th>Description</th></tr>
+        <tr><td><code>page</code></td><td>Page number (pagination)</td></tr>
+      </table>
+      <p><strong>Response (200)</strong></p>
+      <pre>{
+  "current_page": 1,
+  "data": [
+    { "id": 1, "name": "Pen", "description": "...", "price": "4.50", "stock": 120 }
+  ],
+  "total": 20
+}</pre>
+      <p><strong>curl</strong></p>
+      <pre>curl -s "{{base_url}}/api/products"</pre>
+    </div>
+
+    <div class="endpoint">
+      <strong>GET /api/products/{id}</strong>
+      <p class="muted">Return a single product by ID.</p>
+      <p><strong>Response (200)</strong></p>
+      <pre>{ "id": 1, "name": "Pen", "description": "...", "price": "4.50", "stock": 120 }</pre>
+      <p><strong>curl</strong></p>
+      <pre>curl -s "{{base_url}}/api/products/1"</pre>
+    </div>
+
+    <div class="endpoint">
+      <strong>POST /api/products</strong>
+      <p class="muted">Create a new product. Content-Type: application/json</p>
+      <p><strong>Request body</strong></p>
+      <pre>{
+  "name": "String (required)",
+  "description": "String (optional)",
+  "price": "Number (required)",
+  "stock": "Integer (required)"
+}</pre>
+      <p><strong>Response (201)</strong></p>
+      <pre>{ "id": 21, "name": "...", "description": "...", "price": "10.00", "stock": 5 }</pre>
+      <p><strong>curl</strong></p>
+      <pre>curl -X POST "{{base_url}}/api/products" \
+  -H "Content-Type: application/json" \
+  -d '{"name":"Notebook","description":"A5 notebook","price":3.5,"stock":50}'</pre>
+    </div>
+
+    <div class="endpoint">
+      <strong>PUT /api/products/{id}</strong>
+      <p class="muted">Replace product data completely. Provide all required fields.</p>
+      <p><strong>Response (200)</strong></p>
+      <pre>{ "id": 1, "name": "Updated", "description": "...", "price": "5.00", "stock": 30 }</pre>
+    </div>
+
+    <div class="endpoint">
+      <strong>PATCH /api/products/{id}</strong>
+      <p class="muted">Partial update: send any subset of writable fields.</p>
+    </div>
+
+    <div class="endpoint">
+      <strong>DELETE /api/products/{id}</strong>
+      <p class="muted">Delete the product. Response: 204 No Content on success.</p>
+    </div>
+
+    <h2>Postman</h2>
+    <p>Import the collection file <a href="postman_collection.json">docs/postman_collection.json</a> into Postman. Set environment variable <code>base_url</code> (e.g. <code>http://localhost</code>).</p>
+
+    <h2>Validation errors</h2>
+    <p class="muted">If request data is invalid, API returns <code>422 Unprocessable Entity</code> with an errors object.</p>
+    <pre>{
+  "message": "The given data was invalid.",
+  "errors": {
+    "name": ["The name field is required."]
+  }
+}</pre>
+
+    <h2>Notes</h2>
+    <ul>
+      <li>Replace <code>{{base_url}}</code> with your running application's base URL.</li>
+      <li>Routes are registered in <code>routes/api.php</code>.</li>
+      <li>Models and seeders are included so you can run <code>php artisan migrate --seed</code> when environment PHP version matches composer requirements.</li>
+    </ul>
+
+    <p style="margin-top:24px"><a class="btn" href="postman_collection.json">Download Postman Collection</a></p>
+  </div>
+</body>
+</html>

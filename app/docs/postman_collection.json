@@ -1,0 +1,122 @@
+{
+  "info": {
+    "name": "Products API - Laravel",
+    "_postman_id": "products-api-collection",
+    "description": "Postman collection to test Products CRUD API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "http://localhost"
+    }
+  ],
+  "item": [
+    {
+      "name": "List Products",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{base_url}}/api/products",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "api",
+            "products"
+          ]
+        }
+      }
+    },
+    {
+      "name": "Get Product",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{base_url}}/api/products/1",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "api",
+            "products",
+            "1"
+          ]
+        }
+      }
+    },
+    {
+      "name": "Create Product",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"name\": \"قلم حبر\",\n  \"description\": \"قلم أسود\",\n  \"price\": 4.5,\n  \"stock\": 120\n}"
+        },
+        "url": {
+          "raw": "{{base_url}}/api/products",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "api",
+            "products"
+          ]
+        }
+      }
+    },
+    {
+      "name": "Update Product",
+      "request": {
+        "method": "PUT",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"name\": \"قلم جِل\",\n  \"description\": \"قلم جِل أزرق\",\n  \"price\": 5.0,\n  \"stock\": 80\n}"
+        },
+        "url": {
+          "raw": "{{base_url}}/api/products/1",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "api",
+            "products",
+            "1"
+          ]
+        }
+      }
+    },
+    {
+      "name": "Delete Product",
+      "request": {
+        "method": "DELETE",
+        "header": [],
+        "url": {
+          "raw": "{{base_url}}/api/products/1",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "api",
+            "products",
+            "1"
+          ]
+        }
+      }
+    }
+  ]
+}
